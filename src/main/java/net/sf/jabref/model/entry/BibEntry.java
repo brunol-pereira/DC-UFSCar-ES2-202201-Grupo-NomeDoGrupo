@@ -35,7 +35,6 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.TreeSet;
-
 import net.sf.jabref.model.database.BibDatabase;
 
 import com.google.common.base.Strings;

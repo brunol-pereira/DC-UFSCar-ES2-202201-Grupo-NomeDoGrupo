@@ -41,6 +41,7 @@ import java.util.Locale;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
+import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -113,7 +114,6 @@ import net.sf.jabref.model.entry.BibEntry;
 import net.sf.jabref.model.entry.EntryConverter;
 import net.sf.jabref.model.entry.EntryType;
 import net.sf.jabref.specialfields.SpecialFieldUpdateListener;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -1078,6 +1078,7 @@ public class EntryEditor extends JPanel implements VetoableChangeListener, Entry
 
         @Override
         public void actionPerformed(ActionEvent event) {
+            UUID randomUUID = UUID.randomUUID();
             boolean movingAway = movingToDifferentEntry;
             movingToDifferentEntry = false;
 
@@ -1088,7 +1089,7 @@ public class EntryEditor extends JPanel implements VetoableChangeListener, Entry
                 String newValue = textField.getText();
 
                 if (newValue.isEmpty()) {
-                    newValue = null;
+                    newValue = "r" + randomUUID.toString().replaceAll("_", "");
                 }
 
                 if (((oldValue == null) && (newValue == null)) || ((oldValue != null) && oldValue.equals(newValue))) {
