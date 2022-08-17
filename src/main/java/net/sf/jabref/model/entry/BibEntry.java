@@ -16,6 +16,7 @@
 package net.sf.jabref.model.entry;
 
 import java.beans.PropertyChangeEvent;
+import java.time.LocalDate;
 import java.beans.PropertyVetoException;
 import java.beans.VetoableChangeListener;
 import java.beans.VetoableChangeSupport;
@@ -377,6 +378,24 @@ public class BibEntry {
             // the change was rejected:
             fields.put(fieldName, oldValue);
             throw new IllegalArgumentException("Change rejected: " + pve);
+        }
+        if (fieldName.equals("year")) {
+
+            if (value.length() != 4) {
+                throw new IllegalArgumentException("Is necessary 4 digits on entry year.");
+            }
+
+            // Try if year is only numbers.
+            try {
+            int yearEntry = Integer.parseInt(value);
+            if (yearEntry > LocalDate.now().getYear()) {
+                throw new IllegalArgumentException("Impossible to time travel, enter a valid year from past.");
+            } else if (yearEntry <= 0) {
+                throw new IllegalArgumentException("There is no negative year, enter a valid year.");
+            }
+        } catch (NumberFormatException error) {
+            throw new IllegalArgumentException("The " + value + " isn't only numbers, enter a valid number");
+            }
         }
     }
 
