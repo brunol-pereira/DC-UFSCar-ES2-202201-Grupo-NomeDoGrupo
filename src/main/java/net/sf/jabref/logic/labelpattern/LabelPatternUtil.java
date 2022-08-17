@@ -1419,6 +1419,10 @@ public class LabelPatternUtil {
             }
         }
 
+        if ((key.length() <= 2) || !Character.isLetter(key.charAt(0))) {
+            return "";
+        }
+
         // Replace non-English characters like umlauts etc. with a sensible
         // letter or letter combination that bibtex can accept.
 
