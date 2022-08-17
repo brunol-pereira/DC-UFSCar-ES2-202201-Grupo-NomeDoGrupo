@@ -364,21 +364,6 @@ public class BibEntry {
             throw new IllegalArgumentException("The field name '" + name + "' is reserved");
         }
 
-        changed = true;
-
-        String oldValue = fields.get(fieldName);
-        try {
-            // We set the field before throwing the changeEvent, to enable
-            // the change listener to access the new value if the change
-            // sets off a change in database sorting etc.
-            fields.put(fieldName, value);
-            firePropertyChangedEvent(fieldName, oldValue, value);
-        } catch (PropertyVetoException pve) {
-            // Since we have already made the change, we must undo it since
-            // the change was rejected:
-            fields.put(fieldName, oldValue);
-            throw new IllegalArgumentException("Change rejected: " + pve);
-        }
         if (fieldName.equals("year")) {
 
             if (value.length() != 4) {
@@ -396,6 +381,22 @@ public class BibEntry {
         } catch (NumberFormatException error) {
             throw new IllegalArgumentException("The " + value + " isn't only numbers, enter a valid number");
             }
+        }
+
+        changed = true;
+
+        String oldValue = fields.get(fieldName);
+        try {
+            // We set the field before throwing the changeEvent, to enable
+            // the change listener to access the new value if the change
+            // sets off a change in database sorting etc.
+            fields.put(fieldName, value);
+            firePropertyChangedEvent(fieldName, oldValue, value);
+        } catch (PropertyVetoException pve) {
+            // Since we have already made the change, we must undo it since
+            // the change was rejected:
+            fields.put(fieldName, oldValue);
+            throw new IllegalArgumentException("Change rejected: " + pve);
         }
     }
 
