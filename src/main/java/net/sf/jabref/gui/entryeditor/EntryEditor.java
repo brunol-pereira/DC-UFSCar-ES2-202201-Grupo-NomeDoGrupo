@@ -1101,7 +1101,7 @@ public class EntryEditor extends JPanel implements VetoableChangeListener, Entry
                 if ((cleaned == null) || cleaned.equals(newValue)) {
                     textField.setValidBackgroundColor();
                 } else {
-                    JOptionPane.showMessageDialog(frame, Localization.lang("Invalid BibTeX key"),
+                    JOptionPane.showMessageDialog(frame, Localization.lang("Invalid BibTeX key, please provide a key starting with a letter and having two or more characters"),
                             Localization.lang("Error setting field"), JOptionPane.ERROR_MESSAGE);
                     textField.setInvalidBackgroundColor();
                     return;
