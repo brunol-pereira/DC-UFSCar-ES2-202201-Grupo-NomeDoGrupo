@@ -1,6 +1,7 @@
 package net.sf.jabref.logic.integrity;
 
 import java.io.File;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -279,11 +280,15 @@ public class IntegrityCheck {
             if (!value.isPresent()) {
                 return Collections.emptyList();
             }
-
-            if (!CONTAINS_FOUR_DIGIT.test(value.get().trim())) {
-                return Collections.singletonList(new IntegrityMessage(Localization.lang("should contain a four digit number"), entry, "year"));
+            Integer currentYear = LocalDate.now().getYear();
+            if (Integer.parseInt(value.get().trim()) > currentYear) {
+                return Collections.singletonList(new IntegrityMessage(
+                        Localization.lang("invalid year, some person can't do a time travel"), entry, "year"));
             }
-
+            if ((value.get().trim()).length() != 4) {
+                return Collections.singletonList(
+                        new IntegrityMessage(Localization.lang("should contain a four digit number"), entry, "year"));
+            }
             return Collections.emptyList();
         }
     }

@@ -16,6 +16,7 @@
 package net.sf.jabref.model.entry;
 
 import java.beans.PropertyChangeEvent;
+import java.time.LocalDate;
 import java.beans.PropertyVetoException;
 import java.beans.VetoableChangeListener;
 import java.beans.VetoableChangeSupport;
@@ -35,7 +36,6 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.TreeSet;
-
 import net.sf.jabref.model.database.BibDatabase;
 
 import com.google.common.base.Strings;
@@ -43,6 +43,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 public class BibEntry {
+
     private static final Log LOGGER = LogFactory.getLog(BibEntry.class);
 
     public static final String TYPE_HEADER = "entrytype";
@@ -363,6 +364,27 @@ public class BibEntry {
             throw new IllegalArgumentException("The field name '" + name + "' is reserved");
         }
 
+        if (fieldName.equals("year")) {
+
+            // Try if year is only numbers.
+            try {
+                int yearEntry = Integer.parseInt(value);
+                if (yearEntry > LocalDate.now().getYear()) {
+                    throw new IllegalArgumentException("Impossible to time travel, enter a valid year from past.");
+                } else if (yearEntry <= 0) {
+                    throw new IllegalArgumentException("There is no negative year or year 0, enter a valid year.");
+                }
+
+                // Try if year has 4 chars.
+                if (yearEntry < 1000) {
+                    throw new IllegalArgumentException("Is necessary 4 digits on entry year.");
+                }
+            } catch (NumberFormatException error) {
+                throw new IllegalArgumentException("The " + value + " isn't only numbers, enter a valid number");
+            }
+
+        }
+
         changed = true;
 
         String oldValue = fields.get(fieldName);
@@ -542,7 +564,6 @@ public class BibEntry {
         }
         return year;
     }
-
 
     public void setParsedSerialization(String parsedSerialization) {
         changed = false;
