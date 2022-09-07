@@ -43,6 +43,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 public class BibEntry {
+
     private static final Log LOGGER = LogFactory.getLog(BibEntry.class);
 
     public static final String TYPE_HEADER = "entrytype";
@@ -365,21 +366,23 @@ public class BibEntry {
 
         if (fieldName.equals("year")) {
 
-            if (value.length() != 4) {
-                throw new IllegalArgumentException("Is necessary 4 digits on entry year.");
-            }
-
             // Try if year is only numbers.
             try {
-            int yearEntry = Integer.parseInt(value);
-            if (yearEntry > LocalDate.now().getYear()) {
-                throw new IllegalArgumentException("Impossible to time travel, enter a valid year from past.");
-            } else if (yearEntry <= 0) {
-                throw new IllegalArgumentException("There is no negative year, enter a valid year.");
+                int yearEntry = Integer.parseInt(value);
+                if (yearEntry > LocalDate.now().getYear()) {
+                    throw new IllegalArgumentException("Impossible to time travel, enter a valid year from past.");
+                } else if (yearEntry <= 0) {
+                    throw new IllegalArgumentException("There is no negative year or year 0, enter a valid year.");
+                }
+
+                // Try if year has 4 chars.
+                if (yearEntry < 1000) {
+                    throw new IllegalArgumentException("Is necessary 4 digits on entry year.");
+                }
+            } catch (NumberFormatException error) {
+                throw new IllegalArgumentException("The " + value + " isn't only numbers, enter a valid number");
             }
-        } catch (NumberFormatException error) {
-            throw new IllegalArgumentException("The " + value + " isn't only numbers, enter a valid number");
-            }
+
         }
 
         changed = true;
@@ -561,7 +564,6 @@ public class BibEntry {
         }
         return year;
     }
-
 
     public void setParsedSerialization(String parsedSerialization) {
         changed = false;
