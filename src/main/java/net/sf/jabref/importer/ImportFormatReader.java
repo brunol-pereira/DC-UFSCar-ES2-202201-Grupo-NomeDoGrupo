@@ -35,13 +35,6 @@ import net.sf.jabref.importer.fileformat.BibTeXMLImporter;
 import net.sf.jabref.importer.fileformat.BiblioscapeImporter;
 import net.sf.jabref.importer.fileformat.BibtexImporter;
 import net.sf.jabref.importer.fileformat.CopacImporter;
-
-// -------------------------------------------------------
-// Original code from Name of group from SE2 from UFSCar.
-//                       👉👈                            
-// -------------------------------------------------------
-import net.sf.jabref.importer.fileformat.CSV_Importer;
-
 import net.sf.jabref.importer.fileformat.EndnoteImporter;
 import net.sf.jabref.importer.fileformat.FreeCiteImporter;
 import net.sf.jabref.importer.fileformat.ImportFormat;
@@ -82,7 +75,6 @@ public class ImportFormatReader {
         formats.add(new BibtexImporter());
         formats.add(new BibTeXMLImporter());
         formats.add(new CopacImporter());
-        formats.add(new CSV_Importer());
         formats.add(new EndnoteImporter());
         formats.add(new FreeCiteImporter());
         formats.add(new InspecImporter());
@@ -129,7 +121,8 @@ public class ImportFormatReader {
         return Optional.empty();
     }
 
-    public List<BibEntry> importFromFile(String format, String filename, OutputPrinter status) throws IOException {
+    public List<BibEntry> importFromFile(String format, String filename, OutputPrinter status)
+            throws IOException {
         Optional<ImportFormat> importer = getByCliId(format);
 
         if (!importer.isPresent()) {
@@ -139,8 +132,7 @@ public class ImportFormatReader {
         return importFromFile(importer.get(), filename, status);
     }
 
-    public List<BibEntry> importFromFile(ImportFormat importer, String filename, OutputPrinter status)
-            throws IOException {
+    public List<BibEntry> importFromFile(ImportFormat importer, String filename, OutputPrinter status) throws IOException {
         Objects.requireNonNull(importer);
         Objects.requireNonNull(filename);
         File file = new File(filename);
@@ -199,6 +191,8 @@ public class ImportFormatReader {
         return sb.toString();
     }
 
+
+
     public static InputStreamReader getUTF8Reader(File f) throws IOException {
         return getReader(f, StandardCharsets.UTF_8);
     }
@@ -207,7 +201,8 @@ public class ImportFormatReader {
         return getReader(f, StandardCharsets.UTF_16);
     }
 
-    public static InputStreamReader getReader(File f, Charset charset) throws IOException {
+    public static InputStreamReader getReader(File f, Charset charset)
+            throws IOException {
         return new InputStreamReader(new FileInputStream(f), charset);
     }
 
@@ -217,7 +212,6 @@ public class ImportFormatReader {
 
         return reader;
     }
-
 
     public static class UnknownFormatImport {
 
@@ -245,7 +239,8 @@ public class ImportFormatReader {
 
         // First, see if it is a BibTeX file:
         try {
-            ParserResult pr = OpenDatabaseAction.loadDatabase(new File(filename), Globals.prefs.getDefaultEncoding());
+            ParserResult pr = OpenDatabaseAction.loadDatabase(new File(filename),
+                    Globals.prefs.getDefaultEncoding());
             if (pr.getDatabase().hasEntries() || !pr.getDatabase().hasNoStrings()) {
                 pr.setFile(new File(filename));
                 return new UnknownFormatImport(ImportFormatReader.BIBTEX_FORMAT, pr);
