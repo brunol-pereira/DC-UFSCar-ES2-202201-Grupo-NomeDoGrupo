@@ -1,3 +1,8 @@
+// -------------------------------------------------------
+// Original code from Name of group from SE2 from UFSCar.
+//                       👉👈                            
+// -------------------------------------------------------
+
 package net.sf.jabref.importer.fileformat;
 
 import java.io.IOException;
